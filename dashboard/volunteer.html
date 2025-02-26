@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Dashboard</title>
+    <link rel="stylesheet" href="stylev.css">
+</head>
+<body>
+    <div class="dashboard-content">
+        <div class="pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Volunteer Dashboard</h1>
+            <p>Welcome! Here is an available volunteer event.</p>
+        </div>
+        <div class="search-filter-container">
+            <input type="text" placeholder="Search events...">
+            <select>
+                <option>Filter</option>
+            </select>
+            <button class="btn-browse">Browse All</button>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Available Events</h2>
+        </div>
+        <div class="volunteer-event-row" data-event-id="beach-cleanup">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>Beach Cleanup</h5>
+                    <p>May 15, 2025 9:00 AM - 1:00 PM<br>Downtown Beach</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 62.5%;"></div>
+                    </div>
+                    <p>25/40 Attendees</p>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 10%;"></div>
+                    </div>
+                    <p>1/10 Volunteers</p>
+                </div>
+                <div>
+                    <a href="#" class="btn btn-sm btn-success" onclick="toggleEventDetails()">View Details</a>
+                </div>
+            </div>
+            <div class="event-details">
+                <p><strong>Description:</strong> Join us for a community beach cleanup event! Volunteers will help remove trash and keep our local beaches beautiful.</p>
+                <p><strong>Location:</strong> Downtown Beach</p>
+                <p><strong>Time:</strong> May 15, 2025 9:00 AM - 1:00 PM</p>
+                <p><strong>Required Attendees:</strong> 40</p>
+                <p><strong>Current Attendees:</strong> 25</p>
+                <p><strong>Required Volunteers:</strong> 10</p>
+                <p><strong>Current Volunteers:</strong> 1</p>
+                <div class="join-buttons">
+                    <button class="btn btn-primary" onclick="closeEventDetails()">Join Event as Volunteer</button>
+                    <button class="btn btn-secondary" onclick="closeEventDetails()">Join Event as Attendee</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleEventDetails() {
+            const eventDetails = document.querySelector('.event-details');
+            if (eventDetails.style.display === 'none' || eventDetails.style.display === '') {
+                eventDetails.style.display = 'block';
+            } else {
+                eventDetails.style.display = 'none';
+            }
+        }
+
+        function closeEventDetails() {
+            const eventDetails = document.querySelector('.event-details');
+            eventDetails.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

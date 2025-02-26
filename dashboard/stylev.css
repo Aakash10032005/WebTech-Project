@@ -1,0 +1,93 @@
+.progress-bar-container {
+    width: 100%;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    height: 10px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #6759ff;
+    border-radius: 5px;
+}
+
+.search-filter-container input[type="text"],
+.search-filter-container select,
+.search-filter-container .btn-browse {
+    border-radius: 20px;
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+}
+
+.search-filter-container .btn-browse {
+    background-color: #6759ff;
+    color: white;
+    border: none;
+}
+
+.search-filter-container .btn-browse:hover {
+    background-color: #5246d6;
+}
+
+.volunteer-event-row {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.volunteer-event-row h5 {
+    margin-bottom: 5px;
+}
+
+.volunteer-event-row p {
+    color: black;
+    margin-bottom: 10px;
+}
+
+.volunteer-event-row .btn-success {
+    background-color: #6759ff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    color: white;
+}
+
+.volunteer-event-row .btn-success:hover {
+    background-color: #5246d6;
+}
+
+.event-details {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: lightblue;
+    border: 1px solid #ddd;
+    color: black; /* Text color changed to black */
+}
+
+.join-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.join-buttons button {
+    background-color: #6759ff;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.join-buttons .btn-primary {
+    background-color: #6759ff; /* Primary button color */
+    color: white;
+    border: none;
+}
+
+.join-buttons .btn-secondary {
+    background-color: #ddd; /* Secondary button color */
+    color: black;
+    border: none;
+}
