@@ -118,19 +118,38 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFZ4LZSeVH4jC7jClwYUC3-euhJCPvgdU",
+            authDomain: "volunteer-management-b7958.firebaseapp.com",
+            projectId: "volunteer-management-b7958",
+            storageBucket: "volunteer-management-b7958.firebasestorage.app",
+            messagingSenderId: "375011986851",
+            appId: "1:375011986851:web:cf4231e8f69e5f27ae5e16",
+            measurementId: "G-KPQL8FS5WC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app); // Initialize auth
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
-            // Here you would typically send these credentials to your server
-            console.log('Login attempt:', { email, password });
-            
-            // For demonstration, we'll just log a success message
-            alert('Login successful!');
-            // You can replace the alert with redirection to another page.
-            // window.location.href = "dashboard.html";
+
+            signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+    alert("Redirecting to Dashboard");
+    window.location.href = "index.html"; // Correct usage  
+    console.log("Redirect complete");
+})
+                .catch(error => {
+                    alert("Login failed: " + error.message);
+                    console.error("Login error:", error);
+                });
         });
     </script>
 </body>

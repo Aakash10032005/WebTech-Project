@@ -1,0 +1,100 @@
+/* General Styles for the Organizer Dashboard */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.dashboard-content {
+    padding: 20px;
+}
+
+/* Card Style for Stats */
+.card-stat {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #fff;
+}
+
+.card-stat .icon {
+    font-size: 30px;
+}
+
+.card-stat .title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.card-stat .value {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.card-stat .change {
+    font-size: 14px;
+}
+
+/* Event Details (Initially Hidden) */
+.event-details {
+    margin-top: 20px;
+    background-color: #e0e0eb;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.event-details h3 {
+    margin-top: 0;
+}
+
+.event-details .join-buttons button {
+    margin-top: 10px;
+}
+
+/* Button Styling */
+.new-event-btn {
+    background-color: #6366f1;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.new-event-btn:hover {
+    background-color: #4f46e5;
+}
+
+.event-row {
+    margin-bottom: 20px;
+}
+
+.event-row .btn {
+    font-size: 14px;
+    padding: 5px 10px;
+    background-color: #ddd;
+    border: none;
+    border-radius: 5px;
+}
+
+.event-row .btn:hover {
+    background-color: #bbb;
+}
+
+.event-row h5 {
+    margin-bottom: 0;
+}
+
+.event-row p {
+    margin: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .card-stat {
+        margin-bottom: 20px;
+    }
+}

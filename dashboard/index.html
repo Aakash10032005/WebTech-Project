@@ -40,11 +40,51 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFZ4LZSeVH4jC7jClwYUC3-euhJCPvgdU",
+            authDomain: "volunteer-management-b7958.firebaseapp.com",
+            projectId: "volunteer-management-b7958",
+            storageBucket: "volunteer-management-b7958.firebasestorage.app",
+            messagingSenderId: "375011986851",
+            appId: "1:375011986851:web:cf4231e8f69e5f27ae5e16",
+            measurementId: "G-KPQL8FS5WC"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
         const switchCheckbox = document.getElementById('switch-35');
         const dashboardContainer = document.getElementById('dashboard-container');
         const sidebar = document.getElementById('sidebar');
-
+    
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                getUserRole(user.uid);
+            } else {
+                updateSidebar(false); // Default to Organizer view
+            }
+        });
+    
+        function getUserRole(uid) {
+            db.collection('users').doc(uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        const isVolunteer = userData.role === 'Volunteer';
+                        updateSidebar(isVolunteer);
+                    } else {
+                        updateSidebar(false);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error getting user role:", error);
+                    updateSidebar(false);
+                });
+        }
+    
         function loadDashboard(url) {
             fetch(url)
                 .then(response => response.text())
@@ -52,74 +92,89 @@
                     dashboardContainer.innerHTML = html;
                     if (url === 'volunteer.html') {
                         bindEventDetailsToggle();
+                        loadVolunteerEvents();
+                    } else if (url === 'organizer.html') {
+                        loadOrganizerEvents();
                     }
                 });
         }
-
+    
+        function loadVolunteerEvents() {
+            db.collection('events').where("type", "==", "Volunteer").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id, " => ", doc.data());
+                    // Append Event data to volunteer.html
+                });
+            });
+        }
+    
+        function loadOrganizerEvents() {
+            db.collection('events').where("organizerId", "==", auth.currentUser.uid).get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    console.log(doc.id, " => ", doc.data());
+                    // Append event data to organizer.html
+                });
+            });
+        }
+    
         function updateSidebar(isVolunteer) {
             let sidebarContent = '';
             if (isVolunteer) {
+                // Volunteer sidebar content
                 sidebarContent = `
                     <button class="nav-button nav-link">Available Events</button>
                     <button class="nav-button nav-link">Event History</button>
                     <div class="mt-auto">
                         <button class="nav-button nav-link">Profile</button>
-                        <button class="circular-button login-btn">Log in</button>
-                        <button class="circular-button signup-btn">Sign up</button>
+                        ${auth.currentUser ? '<button class="circular-button signout-btn">Sign Out</button>' : '<button class="circular-button login-btn">Log in</button><button class="circular-button signup-btn" style="margin-left: 10px;">Sign up</button>'}
                     </div>
                 `;
                 loadDashboard('volunteer.html');
             } else {
+                // Organizer sidebar content
                 sidebarContent = `
                     <button class="nav-button nav-link active">Dashboard</button>
                     <button class="nav-button nav-link">My Events</button>
                     <button class="nav-button nav-link" id="createEventButton">Create Event</button>
                     <div class="mt-auto">
                         <button class="nav-button nav-link">Profile</button>
-                        <button class="circular-button login-btn">Log in</button>
-                        <button class="circular-button signup-btn">Sign up</button>
+                        ${auth.currentUser ? '<button class="circular-button signout-btn">Sign Out</button>' : '<button class="circular-button login-btn">Log in</button><button class="circular-button signup-btn" style="margin-left: 10px;">Sign up</button>'}
                     </div>
                 `;
                 loadDashboard('organizer.html');
             }
             sidebar.innerHTML = sidebarContent;
-
-            // Add event listeners
-            document.querySelector('.login-btn').addEventListener('click', function() {
-                window.location.href = 'login.html';
-            });
-
-            document.querySelector('.signup-btn').addEventListener('click', function() {
-                window.location.href = 'signup.html';
-            });
-
-            if (!isVolunteer) {
-                document.getElementById('createEventButton').addEventListener('click', function() {
-                    loadDashboard('create-event.html');
-                });
+    
+            const loginBtn = document.querySelector('.login-btn');
+            const signupBtn = document.querySelector('.signup-btn');
+            const signoutBtn = document.querySelector('.signout-btn');
+    
+            if (auth.currentUser) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (signupBtn) signupBtn.style.display = 'none';
+                if (signoutBtn) {
+                    signoutBtn.style.display = 'block';
+                    signoutBtn.addEventListener('click', () => {
+                        auth.signOut().then(() => {
+                            window.location.href = 'login.html';
+                        });
+                    });
+                }
+            } else {
+                if (loginBtn) loginBtn.style.display = 'block';
+                if (signupBtn) signupBtn.style.display = 'block';
+                if (signoutBtn) signoutBtn.style.display = 'none';
+                if (loginBtn) loginBtn.addEventListener('click', () => window.location.href = 'login.html');
+                if (signupBtn) signupBtn.addEventListener('click', () => window.location.href = 'signup.html');
+            }
+    
+            if (!isVolunteer && document.getElementById('createEventButton')) {
+                document.getElementById('createEventButton').addEventListener('click', () => loadDashboard('create-event.html'));
             }
         }
-
-        function bindEventDetailsToggle() {
-            const viewDetailsButton = document.querySelector('.btn-success');
-            if (viewDetailsButton) {
-                viewDetailsButton.addEventListener('click', function() {
-                    const eventDetails = document.querySelector('.event-details');
-                    if (eventDetails.style.display === 'none' || eventDetails.style.display === '') {
-                        eventDetails.style.display = 'block';
-                    } else {
-                        eventDetails.style.display = 'none';
-                    }
-                });
-            }
-        }
-
-        switchCheckbox.addEventListener('change', function() {
-            updateSidebar(this.checked);
-        });
-
-        // Load the organizer dashboard and sidebar by default
-        updateSidebar(false);
+    
+        switchCheckbox.addEventListener('change', () => updateSidebar(switchCheckbox.checked));
+        updateSidebar(false); // Initial load
     </script>
 </body>
 </html>

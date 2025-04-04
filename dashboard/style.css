@@ -313,6 +313,7 @@ input:checked + .slider:before {
   border: none;
   color: white;
   transition: transform 0.2s ease-in-out;
+  margin: 10px; /* Add margin around the button */
 }
 
 .circular-button:active {

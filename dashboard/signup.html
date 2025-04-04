@@ -120,7 +120,25 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFZ4LZSeVH4jC7jClwYUC3-euhJCPvgdU",
+            authDomain: "volunteer-management-b7958.firebaseapp.com",
+            projectId: "volunteer-management-b7958",
+            storageBucket: "volunteer-management-b7958.firebasestorage.app",
+            messagingSenderId: "375011986851",
+            appId: "1:375011986851:web:cf4231e8f69e5f27ae5e16",
+            measurementId: "G-KPQL8FS5WC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
         document.getElementById('signupForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const fullName = document.getElementById('fullName').value;
@@ -129,19 +147,28 @@
             const password = document.getElementById('password').value;
             const rePassword = document.getElementById('rePassword').value;
 
-            // Basic password matching check
             if (password !== rePassword) {
                 alert("Passwords do not match!");
                 return;
             }
 
-            // Here you would typically send these credentials to your server
-            console.log('Signup attempt:', { fullName, mobileNo, email, password });
-
-            // For demonstration, we'll just log a success message
-            window.location.href = "dashboard.html";
-            // You can replace the alert with redirection to another page.
-            // window.location.href = "dashboard.html";
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(userCredential => {
+                    const user = userCredential.user;
+                    return setDoc(doc(db, "users", user.uid), {
+                        fullName: fullName,
+                        mobileNo: mobileNo,
+                        role: document.getElementById('switch-35')?.checked ? 'Volunteer' : 'Organizer'
+                    });
+                })
+                .then(() => {
+                    alert("Account Successfully created! Please login.");
+                    window.location.href = "login.html";
+                })
+                .catch(error => {
+                    alert("Signup failed: " + error.message);
+                    console.error("Signup error:", error);
+                });
         });
     </script>
 </body>
